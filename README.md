@@ -13,4 +13,4 @@
 - react Hook을 이용한 상태관리
 
 ## 링크
-- https://DoHyunHwang.github.io/react-netflix-app
+- https://craftedhaze92.github.io/react-netflix-app
