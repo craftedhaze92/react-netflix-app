@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "../../api/axios";
+import { useQuery } from "@tanstack/react-query";
+import axios from "@/api/axios";
+import { Movie } from "@/types";
 
 export default function DetailPage() {
   const { movieId } = useParams();
-  const [movie, setMovie] = useState({});
 
-  useEffect(() => {
-    async function fetchData() {
+  const { data: movie } = useQuery<Movie>({
+    queryKey: ["movie", movieId],
+    queryFn: async () => {
       const request = await axios.get(`/movie/${movieId}`);
-      setMovie(request.data);
-    }
-    fetchData();
-  }, [movieId]);
+      return request.data;
+    },
+    enabled: !!movieId,
+  });
 
   if (!movie) return <div>...loading</div>;
 

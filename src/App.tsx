@@ -1,4 +1,3 @@
-import React from "react";
 import { Outlet, Routes, Route } from "react-router-dom";
 import "./App.scss";
 import Footer from "./components/Footer";

@@ -1,7 +1,6 @@
-import React from "react";
-import Banner from "../../components/Banner";
-import Row from "../../components/Row";
-import requests from "../../api/requests";
+import Banner from "@/components/Banner";
+import Row from "@/components/Row";
+import requests from "@/api/requests";
 
 export default function MainPage() {
   return (

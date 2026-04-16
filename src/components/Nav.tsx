@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Nav.scss";
+import netflixLogo from "@/assets/netflix-logo.svg";
 
 export default function Nav() {
   const [show, setShow] = useState(false);
@@ -21,7 +22,7 @@ export default function Nav() {
     };
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
     navigate(`/search?q=${e.target.value}`);
   };
@@ -30,7 +31,7 @@ export default function Nav() {
     <nav className={`nav ${show && "nav__black"}`}>
       <img
         alt="Netflix logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/170px-Netflix_2015_logo.svg.png"
+        src={netflixLogo}
         className="nav__logo"
         onClick={() => window.location.reload()}
       />

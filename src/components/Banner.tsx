@@ -1,39 +1,37 @@
-import axios from "../api/axios";
-import React, { useEffect, useState } from "react";
-import requests from "../api/requests";
+import axios from "@/api/axios";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import requests from "@/api/requests";
 import "./Banner.scss";
 import styled from "styled-components";
+import { Movie } from "@/types";
+
+const fetchBannerMovie = async (): Promise<Movie> => {
+  const request = await axios.get(requests.fetchNowPlaying);
+  const movieId =
+    request.data.results[
+      Math.floor(Math.random() * request.data.results.length)
+    ].id;
+  const { data: movieDetail } = await axios.get(`movie/${movieId}`, {
+    params: { append_to_response: "videos" },
+  });
+  return movieDetail;
+};
 
 export default function Banner() {
-  const [movie, setMovie] = useState([]);
+  const { data: movie } = useQuery({
+    queryKey: ["banner"],
+    queryFn: fetchBannerMovie,
+    staleTime: 1000 * 60 * 5,
+  });
   const [isClicked, setIsClicked] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    // 현재 상영중인 영화 정보를 가져오기(여러 영화)
-    const request = await axios.get(requests.fetchNowPlaying);
-
-    // 여러 영화 중 영화 하나의 ID를 가져오기
-    const movieId =
-      request.data.results[
-        Math.floor(Math.random() * request.data.results.length)
-      ].id;
-
-    // 특정 영화의 더 상세한 정보를 가져오기(비디오 정보도 포함)
-    const { data: movieDetail } = await axios.get(`movie/${movieId}`, {
-      params: { append_to_response: "videos" },
-    });
-    setMovie(movieDetail);
+  const truncate = (str: string | undefined, n: number) => {
+    return str && str.length > n ? str.substring(0, n - 1) + "..." : str;
   };
 
-  const truncate = (str, n) => {
-    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
-  };
+  if (!movie) return null;
 
-  console.log("movie", movie);
   if (!isClicked) {
     return (
       <header
@@ -73,11 +71,11 @@ export default function Banner() {
           <Iframe
             width="640"
             height="360"
-            src={`https://www.youtube.com/embed/${movie.videos.results[0].key}?controls=1&autoplay=1&loop=1&mute=1&playlist=${movie.videos.results[0].key}`}
+            src={`https://www.youtube.com/embed/${movie.videos?.results[0]?.key}?controls=1&autoplay=1&loop=1&mute=1&playlist=${movie.videos?.results[0]?.key}`}
             title="YouTube video player"
-            frameborder="0"
+            frameBorder="0"
             allow="autoplay; fullscreen"
-            allowfullscreen
+            allowFullScreen
           ></Iframe>
         </HomeContainer>
       </Container>
