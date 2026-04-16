@@ -33,7 +33,7 @@ export default function Nav() {
         alt="Netflix logo"
         src={netflixLogo}
         className="nav__logo"
-        onClick={() => window.location.reload()}
+        onClick={() => navigate("/")}
       />
 
       <input
@@ -41,7 +41,7 @@ export default function Nav() {
         onChange={handleChange}
         className="nav__input"
         type="text"
-        placeholder="영화룰 검색해주세요."
+        placeholder="영화를 검색해주세요."
       />
 
       <img
