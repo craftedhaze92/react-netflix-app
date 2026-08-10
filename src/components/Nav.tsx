@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Nav.scss";
 import netflixLogo from "@/assets/netflix-logo.svg";
+import { useTrailerStore } from "@/store/useTrailerStore";
 
 export default function Nav() {
   const [show, setShow] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+  const isTrailerPlaying = useTrailerStore((state) => state.isPlaying);
+  const { setIsPlaying } = useTrailerStore();
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -27,13 +30,23 @@ export default function Nav() {
     navigate(`/search?q=${e.target.value}`);
   };
 
+  const handleClickLogo = () => {
+    setSearchValue("");
+    setIsPlaying(false);
+    navigate("/");
+  };
+
   return (
-    <nav className={`nav ${show && "nav__black"}`}>
+    <nav
+      className={`nav ${show && "nav__black"} ${
+        isTrailerPlaying && "nav__trailer"
+      }`}
+    >
       <img
         alt="Netflix logo"
         src={netflixLogo}
         className="nav__logo"
-        onClick={() => navigate("/")}
+        onClick={handleClickLogo}
       />
 
       <input

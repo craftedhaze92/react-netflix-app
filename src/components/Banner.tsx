@@ -1,10 +1,11 @@
 import axios from "@/api/axios";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import requests from "@/api/requests";
 import "./Banner.scss";
 import styled from "styled-components";
 import { Movie } from "@/types";
+import { useTrailerStore } from "@/store/useTrailerStore";
 
 const fetchBannerMovie = async (): Promise<Movie> => {
   const request = await axios.get(requests.fetchNowPlaying);
@@ -24,7 +25,11 @@ export default function Banner() {
     queryFn: fetchBannerMovie,
     staleTime: 1000 * 60 * 5,
   });
-  const [isClicked, setIsClicked] = useState(false);
+  const { isPlaying, setIsPlaying } = useTrailerStore();
+
+  useEffect(() => {
+    return () => setIsPlaying(false);
+  }, [setIsPlaying]);
 
   const truncate = (str: string | undefined, n: number) => {
     return str && str.length > n ? str.substring(0, n - 1) + "..." : str;
@@ -32,7 +37,7 @@ export default function Banner() {
 
   if (!movie) return null;
 
-  if (!isClicked) {
+  if (!isPlaying) {
     return (
       <header
         className="banner"
@@ -50,7 +55,7 @@ export default function Banner() {
           <div className="banner__buttons">
             <button
               className="banner__button play"
-              onClick={() => setIsClicked(true)}
+              onClick={() => setIsPlaying(true)}
             >
               Play
             </button>
@@ -106,7 +111,7 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 70px);
 `;
 
 const HomeContainer = styled.div`

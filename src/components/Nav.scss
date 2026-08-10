@@ -1,8 +1,9 @@
 .nav {
+  box-sizing: border-box;
   position: fixed;
   top: 0;
   width: 100%;
-  height: 30px;
+  height: 70px;
   z-index: 1;
   padding: 20px;
   display: flex;
@@ -18,6 +19,17 @@
 
 .nav__black {
   background-color: #111;
+}
+
+.nav__trailer {
+  position: sticky;
+  top: 0;
+
+  .nav__logo,
+  .nav__avatar,
+  .nav__input {
+    position: absolute;
+  }
 }
 
 .nav__logo {
